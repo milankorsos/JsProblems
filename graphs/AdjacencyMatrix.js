@@ -1,11 +1,23 @@
+/*
+  Graph represented with Adjacency Matrix
+  - Storage: O(V^2)
+  - Query: O(1)
+*/
 const Graph = function() {
   this.matrix = [];
 };
 
+/*
+  Print graph matrix
+*/
 Graph.prototype.print = function() {
   return this.matrix;
 };
 
+/*
+  Add vertex to graph
+  - O(V^2)
+*/
 Graph.prototype.addVertex = function() {
   this.matrix.forEach(row => {
     row.push(0);
@@ -15,34 +27,50 @@ Graph.prototype.addVertex = function() {
   this.matrix.push(newRow);
 };
 
+/*
+  Add edge to graph
+  - O(1)
+*/
 Graph.prototype.addEdge = function(vertexA, vertexB) {
-  this.matrix[vertexA - 1][vertexB - 1] = 1;
+  this.matrix[vertexA][vertexB] = 1;
 };
 
-Graph.prototype.getChildren = function(vertex) {
-  const vertexIndex = vertex - 1;
-  const row = this.matrix[vertexIndex];
+/*
+  Get children
+  - private
+*/
+Graph.prototype._getChildren = function(vertex) {
+  const row = this.matrix[vertex];
   const children = [];
 
   for (let i = 0; i < row.length; i++) {
     const value = row[i];
-    const vertex = i + 1;
     if (value === 1) {
-      children.push(vertex);
+      children.push(i);
     }
   }
   return children;
 }
 
-Graph.prototype.dfs = function(rootVertex, results = []) {
-  results.push(rootVertex);
+/*
+  DFS Traversal
+  - preferred for visiting all vertexes
+  - faster, less memory usage
+  - might find suboptimal shortest path
+  - O(|E|+|V|)
+*/
+Graph.prototype.dfs = function(root, results = []) {
+  // If root is already in results dont explore that tree
+  if (results.indexOf(root) !== -1) {
+    return false;
+  }
 
-  // Iterate through children vertices & do DFS on them
-  const children = this.getChildren(rootVertex);
-  children.forEach(vertex => {
-    // If not visited, explore vertex's children
-    const visited = results.indexOf(vertex) !== -1;
-    if (!visited) {
+  // Add root to results
+  results.push(root);
+
+  // Iterate through children & do DFS on them
+  this._getChildren(root).forEach(vertex => {
+    if (results.indexOf(vertex) === -1) {
       this.dfs(vertex, results);
     }
   })
@@ -50,7 +78,13 @@ Graph.prototype.dfs = function(rootVertex, results = []) {
   return results;
 }
 
-
+/*
+  BFS Traversal
+  - use Queue
+  - find shortest path
+  - could be memory intensive
+  - O(|E|+|V|)
+*/
 Graph.prototype.bfs = function(rootVertex) {
   const queue = []; // use queue.push() & queue.shift()
   const results = [];
@@ -61,18 +95,15 @@ Graph.prototype.bfs = function(rootVertex) {
   // Keep searching until Q is empty
   while (queue.length) {
     const vertex = queue.shift();
-    const children = this.getChildren(vertex);
 
     // Add current one to results if not added yet
-    const visited = results.indexOf(vertex) !== -1;
-    if (!visited) {
+    if (results.indexOf(vertex) === -1) {
       results.push(vertex);
     }
 
     // Add children to queue if not visited yet
-    children.forEach(child => {
-      const visitedChild = results.indexOf(child) !== -1;
-      if (!visitedChild) {
+    this._getChildren(vertex).forEach(child => {
+      if (results.indexOf(child) === -1) {
         queue.push(child);
       }
     });

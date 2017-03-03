@@ -1,12 +1,14 @@
 /*
   Graph represented with Adjacency List
+  - Storage: O(V + E)
+  - Query: O(V)
 */
 const Graph = function() {
   this.vertices = {};
 };
 
 /*
-  Print graph
+  Print graph list
 */
 Graph.prototype.print = function() {
   return this.vertices;
