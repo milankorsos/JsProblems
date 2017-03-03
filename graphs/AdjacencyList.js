@@ -60,7 +60,7 @@ Graph.prototype.dfs = function(root, results = []) {
   })
 
   return results;
-}
+};
 
 /*
   BFS Traversal
@@ -94,6 +94,38 @@ Graph.prototype.bfs = function(root) {
   }
 
   return results;
-}
+};
+
+/*
+  See if path exists between two vertices
+  - use BFS (with Queue)
+*/
+Graph.prototype.isPath = function(vertexA, vertexB) {
+  const queue = []; // use queue.pop() & queue.unshift()
+  const path = [];
+
+  queue.unshift(vertexA);
+
+  while (queue.length) {
+    const vertex = queue.pop();
+
+    // If found it, return
+    if (vertex === vertexB) {
+      return true;
+    }
+
+    // Push current vertex to path
+    if (path.indexOf(vertex) === -1) {
+      path.push(vertex);
+    }
+
+    this.vertices[vertex].forEach(child => {
+      if (path.indexOf(child) === -1) {
+        queue.unshift(child);
+      }
+    });
+  }
+  return false;
+};
 
 export default Graph;

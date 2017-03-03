@@ -112,4 +112,38 @@ Graph.prototype.bfs = function(rootVertex) {
   return results;
 }
 
+/*
+  See if path exists between two vertices
+  - use BFS (with Queue)
+*/
+Graph.prototype.isPath = function(vertexA, vertexB) {
+  const queue = []; // use queue.push() & queue.shift()
+  const results = [];
+
+  // Add root to queue
+  queue.push(vertexA);
+
+  // Keep searching until Q is empty
+  while (queue.length) {
+    const vertex = queue.shift();
+    if (vertex === vertexB) {
+      return true;
+    }
+
+    // Add current one to results if not added yet
+    if (results.indexOf(vertex) === -1) {
+      results.push(vertex);
+    }
+
+    // Add children to queue if not visited yet
+    this._getChildren(vertex).forEach(child => {
+      if (results.indexOf(child) === -1) {
+        queue.push(child);
+      }
+    });
+  }
+
+  return false;
+};
+
 export default Graph;

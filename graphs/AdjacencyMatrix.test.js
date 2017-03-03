@@ -102,6 +102,13 @@ test('BFS', () => {
   expect(graph2.bfs(2)).toEqual([2, 0, 3, 1]);
 });
 
+test('isPath', () => {
+  // First graph
+  expect(graph.isPath(5, 1)).toEqual(true);
 
-
-
+  // Second graph
+  expect(graph2.isPath(4, 5)).toEqual(true);
+  expect(graph2.isPath(0, 3)).toEqual(true);
+  expect(graph2.isPath(0, 4)).toEqual(false);
+  expect(graph2.isPath(4, 0)).toEqual(false);
+});
