@@ -24,7 +24,48 @@ https://leetcode.com/problems/the-maze/
 
 */
 
-const dfs = function(grid, start, destination, visited) {
+// Return cell coords when rolling up
+const rollUp = function(maze, x, y) {
+  const canMoveUp = (x, y) => x - 1 >= 0 && maze[x - 1][y] === 0; // !wall & !out of bounds
+  let xNew = x;
+  while (canMoveUp(xNew, y)) {
+    xNew--;
+  }
+  return [xNew, y];
+}
+
+// Return cell coords when rolling down
+const rollDown = function(maze, x, y) {
+  const canMoveDown = (x, y) => x + 1 < maze.length && maze[x + 1][y] === 0; // !wall & !oobounds
+  let xNew = x;
+  while (canMoveDown(xNew, y)) {
+    xNew++;
+  }
+  return [xNew, y];
+}
+
+// Return cell coords when rolling left
+const rollLeft = function(maze, x, y) {
+  const canMoveLeft = (x, y) => y - 1 >= 0 && maze[x][y - 1] === 0; // !wall & !oobounds
+  let yNew = y;
+  while (canMoveLeft(x, yNew)) {
+    yNew--;
+  }
+  return [x, yNew];
+}
+
+// Return cell coords when rolling right
+const rollRight = function(maze, x, y) {
+  const canMoveRight = (x, y) => y + 1 < maze[0].length && maze[x][y + 1] === 0; //!wall & !oobounds
+  let yNew = y;
+  while (canMoveRight(x, yNew)) {
+    yNew++;
+  }
+  return [x, yNew];
+}
+
+// Depth first search (less memory usage than BFS)
+const dfs = function(maze, start, destination, visited) {
   // Found destination!
   if ((start[0] === destination[0]) && (start[1] === destination[1])) {
     return true;
@@ -40,46 +81,30 @@ const dfs = function(grid, start, destination, visited) {
     visited[x][y] = 1;
   }
 
-  // Find last cell
+  // Find last cell and do DFS from there
 
-  // NORTH
-  const canMoveNorthFrom = (x, y) => x - 1 >= 0 && grid[x - 1][y] === 0; // !wall & !out of bounds
+  // UP
+  const startUp = rollUp(maze, x, y);
+  const resultUp = dfs(maze, [startUp[0], startUp[1]], destination, visited);
 
-  let xN = x;
-  while (canMoveNorthFrom(xN, y)) {
-    xN--;
-  }
-  const resultN = dfs(grid, [xN, y], destination, visited);
+  // DOWN
+  const startDown = rollDown(maze, x, y);
+  const resultDown = dfs(maze, [startDown[0], startDown[1]], destination, visited);
 
-  // SOUTH
-  const canMoveSouthFrom = (x, y) => x + 1 < grid.length && grid[x + 1][y] === 0;
-  let xS = x;
-  while (canMoveSouthFrom(xS, y)) {
-    xS++;
-  }
-  const resultS = dfs(grid, [xS, y], destination, visited);
+  // LEFT
+  const startLeft = rollLeft(maze, x, y);
+  const resultLeft = dfs(maze, [startLeft[0], startLeft[1]], destination, visited);
 
-  // WEST
-  const canMoveWestFrom = (x, y) => y - 1 >= 0 && grid[x][y - 1] === 0;
-  let yW = y;
-  while (canMoveWestFrom(x, yW)) {
-    yW--;
-  }
-  const resultW = dfs(grid, [x, yW], destination, visited);
+  // RIGHT
+  const startRight = rollRight(maze, x, y);
+  const resultRight = dfs(maze, [startRight[0], startRight[1]], destination, visited);
 
-  // EAST
-  const canMoveEastFrom = (x, y) => y + 1 < grid[0].length && grid[x][y + 1] === 0;
-  let yE = y;
-  while (canMoveEastFrom(x, yE)) {
-    yE++;
-  }
-  const resultE = dfs(grid, [x, yE], destination, visited);
-
-  return resultN || resultE || resultS || resultW;
+  return resultUp || resultDown || resultLeft || resultRight;
 }
 
+// Check if there is path between start & destination with rolling balls
 const hasPath = function(grid, start, destination) {
-  // Keep track of blocks where we already started rolling
+  // Keep track of blocks where we already started rolling from
   const visited = [];
   for (let i = 0; i < grid.length; i++) {
     visited.push(new Array(grid[0].length).fill(0));
