@@ -25,7 +25,7 @@ const selectionSort = function(array) {
   const sorted = [array[0]];
   const unsorted = array.slice(1);
 
-  return sorted.concat(selectionSort(unsorted))
+  return sorted.concat(selectionSort(unsorted));
 };
 
 export default selectionSort;
