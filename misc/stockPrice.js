@@ -18,18 +18,22 @@
 */
 
 const getMaxProfit = function(stockPricesYesterday) {
-  let maxProfit = 0;
-  for (let i = 0; i < stockPricesYesterday.length; i++) {
-    const first = stockPricesYesterday[i];
-
-    for (let j = i + 1; j < stockPricesYesterday.length; j++) {
-      const second = stockPricesYesterday[j];
-      const profit = second - first;
-      if (profit > 0) {
-        maxProfit = Math.max(profit, maxProfit);
-      }
-    }
+  if (stockPricesYesterday.length < 2) {
+    return 0;
   }
+
+  let maxProfit = 0;
+  let smallestPrice = stockPricesYesterday[0];
+
+  stockPricesYesterday.forEach(currentPrice => {
+    const profit = currentPrice - smallestPrice;
+
+    if (profit > 0) {
+      maxProfit = Math.max(maxProfit, profit);
+    }
+
+    smallestPrice = Math.min(smallestPrice, currentPrice);
+  })
 
   return maxProfit;
 }
