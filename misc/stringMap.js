@@ -12,7 +12,7 @@ const stringMap = function(map, ints, resultString = '', results = []) {
   }
 
   map[ints[0]].forEach(string => {
-    stringMap(map, ints.slice(1, resultString + string, results));
+    stringMap(map, ints.slice(1), resultString + string, results);
   });
 
   return results;
