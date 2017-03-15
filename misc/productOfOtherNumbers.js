@@ -22,33 +22,23 @@
 */
 
 const getProductsOfAllIntsExceptAtIndex = function(ints) {
+  if (ints.length < 2) {
+    return [];
+  }
 
   // products before index
-  let beforeIndex = [];
+  let productSoFar = 1;
+  const products = [];
   for (let i = 0; i < ints.length; i++) {
-    if (i === 0) {
-      beforeIndex.push(1);
-    } else {
-      beforeIndex.push(beforeIndex[i - 1] * ints[i - 1]);
-    }
+    products[i] = productSoFar;
+    productSoFar *= ints[i];
   }
 
   // products after index
-  let afterIndex = [];
-  for (let i = 0; i < ints.length; i++) {
-    const j = ints.length - i - 1;
-    if (j === ints.length -1) {
-      afterIndex.push(1);
-    } else {
-      afterIndex.push(afterIndex[i - 1] * ints[j + 1]);
-    }
-  }
-
-  // calculating results
-  let products = [];
-  for (let i = 0; i < beforeIndex.length; i++) {
-    const j = beforeIndex.length - i - 1;
-    products.push(beforeIndex[i] * afterIndex[j]);
+  productSoFar = 1;
+  for (let i = ints.length - 1; i >= 0; i--) {
+    products[i] *= productSoFar;
+    productSoFar *= ints[i];
   }
 
   return products;
