@@ -8,22 +8,39 @@
 
 const highestProductOf3 = function(ints) {
 
-  let highest = 0;
-  for (let i = 0; i < ints.length; i++) {
-    const first = ints[i];
+  const sortFunc = (a, b) => a > b ? 1 : 0;
 
-    for (let j = i + 1; j < ints.length; j++) {
+  const highestPositives = []; // max length: 3, sorted
+  const lowestNegatives = []; // max length: 2, sorted
 
-      const second = ints[j];
-
-      for (let k = j + 1; k < ints.length; k++) {
-        const third = ints[k];
-        highest = Math.max(highest, first * second * third);
+  ints.forEach(int => {
+    if (int >= 0) { // Positives
+      if (highestPositives.length < 3) {
+        highestPositives.push(int);
+      } else {
+        // check if int > lowest of highestPos, if so then update that
+        if (int > highestPositives[0]) {
+          highestPositives[0] = int;
+        }
+      }
+      highestPositives.sort(sortFunc); // keep array sorted
+    } else { // Negatives
+      if (lowestNegatives.length < 2) {
+        lowestNegatives.push(int);
+      } else {
+        // check if int < highest lowestNegatives, of so then update that
+        if (int < lowestNegatives[1]) {
+          lowestNegatives[1] = int;
+        }
       }
     }
-  }
+  });
 
-  return highest;
+  // Calculate highest product of 3
+  highestPositives.push(lowestNegatives[0] * -1, lowestNegatives[1] * -1);
+  highestPositives.sort(sortFunc);
+
+  return highestPositives[4] * highestPositives[3] * highestPositives[2];
 }
 
 export default highestProductOf3;
