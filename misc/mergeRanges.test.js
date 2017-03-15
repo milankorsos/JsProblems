@@ -17,3 +17,26 @@ const expected = [
 test('mergeRanges', () => {
   expect(mergeRanges(input)).toEqual(expected);
 })
+
+test('mergeRanges2', () => {
+  expect(
+    mergeRanges([{startTime: 1, endTime: 2}, {startTime: 2, endTime: 3}])
+  ).toEqual([{startTime: 1, endTime: 3}]);
+})
+
+test('mergeRanges3', () => {
+  expect(
+    mergeRanges([{startTime: 1, endTime: 5}, {startTime: 2, endTime: 3}])
+  ).toEqual([{startTime: 1, endTime: 5}]);
+})
+
+test('mergeRanges4', () => {
+  expect(
+    mergeRanges([
+      {startTime: 1, endTime: 10},
+      {startTime: 2, endTime: 6},
+      {startTime: 3, endTime: 5},
+      {startTime: 7, endTime: 9},
+    ])
+  ).toEqual([{startTime: 1, endTime: 10}]);
+})
