@@ -25,66 +25,52 @@
 
 */
 
-const getSumOfArray = function(arr) {
-  return arr.reduce((acc, value) => {
-    return acc + value;
-  }, 0);
+
+const cashier = function(amount, denominations) {
+  const memo = {};
+  return waysToMake(amount, denominations, 0, memo);
 }
 
-// console.log('sum', getSumOfArray([1, 2, 3]) === 6);
-// console.log('sum', getSumOfArray([]) === 0);
-// console.log('sum', getSumOfArray([0]) === 0);
+const waysToMake = function(amountLeft, denominations, index, memo) {
 
-const isArrayHasArrayItem = function(arr, item) {
-  const found = arr.find(arrItem => {
-    if (arrItem.length !== item.length) {
-      return false;
-    } else {
-      arrItem.sort();
-      item.sort();
-      for (let i = 0; i < arrItem.length; i++) {
-        if (arrItem[i] !== item[i]) {
-          return false;
-        }
-      }
-      return true;
-    }
-  });
-  return !!found;
-}
+  // check memo first
+  const memoKey = String([amountLeft, index]);
+  if (memo[memoKey] !== undefined) {
+    return memo[memoKey];
+  }
 
-// console.log('array', isArrayHasArrayItem([], [1, 2]) === false);
-// console.log('array', isArrayHasArrayItem([[1, 2], [2, 3]], [1, 2]) === true);
-// console.log('array', isArrayHasArrayItem([[2, 1], [2, 3]], [1, 2]) === true);
-// console.log('array', isArrayHasArrayItem([[1, 3], [2, 3]], [1, 2]) === false);
-// console.log('array', isArrayHasArrayItem([[1, 3], [2, 3, 4]], [1, 2]) === false);
+  // base cases
+
+  // we hit the amount
+  if (amountLeft === 0) {
+    return 1;
+  }
+
+  // we overshoot
+  if (amountLeft < 0) {
+    return 0;
+  }
+
+  // we are out of denominations
+  if (denominations.length === index) {
+    return 0
+  }
 
 
-const cashier = function(amount, denominations, results = [], tempResult = []) {
-  const sum = getSumOfArray(tempResult);
+  // choose current coint
+  const currentCoin = denominations[index];
 
-  denominations.forEach(denomination => {
-    const result = Array.from(tempResult);
-    result.push(denomination);
+  // see how many possibilities we can get for each number of times to use currentCoin
+  let possibilities = 0;
+  while (amountLeft >= 0) {
+    possibilities += waysToMake(amountLeft, denominations, index + 1, memo);
+    amountLeft -= currentCoin;
+  }
 
-    // Check if success
-    if (sum + denomination === amount) {
-      if (!isArrayHasArrayItem(results, result)) {
-        results.push(result);
-      }
-      return true;
-    }
+  // save answer to memo
+  memo[memoKey] = possibilities;
+  return possibilities;
 
-    // Check if overshooting
-    if (sum + denomination > amount) {
-      return false;
-    }
-
-    // Otherwise, keep looking recursively
-    cashier(amount, denominations, results, result);
-  });
-
-  return results.length;
-}
+};
 
 export default cashier;
