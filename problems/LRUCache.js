@@ -16,53 +16,126 @@ https://leetcode.com/problems/lru-cache/
 
 */
 
+/**
+ * @param {number} key
+ * @param {number} value
+ * @return {void}
+ */
+export const Node = function(key, value) {
+  this.key = key;
+  this.value = value;
+  this.next = null;
+  this.prev = null;
+}
+
+/**
+ */
+export const DoubleLinkedList = function() {
+  this.length = 0;
+  this.first = null;
+  this.last = null;
+}
+
+/**
+ * @param {object} node
+ * @return {void}
+ */
+DoubleLinkedList.prototype.remove = function(node) {
+    const next = node.next;
+    const prev = node.prev;
+
+    if (prev && next) {
+      // middle of the list
+      prev.next = next;
+      next.prev = prev;
+
+    } else if (!prev && next) {
+      // first item
+      this.first = next;
+      next.prev = null;
+
+    } else if (prev && !next) {
+      // last item
+      this.last = prev;
+      prev.next = null;
+
+    } else {
+      // only item
+      this.first = null;
+      this.last = null;
+    }
+
+    this.length--;
+};
+
+/**
+ * @param {object} node
+ * @return {void}
+ */
+DoubleLinkedList.prototype.addFirst = function(node) {
+  if (this.length === 0) {
+    this.first = node;
+    this.last = node;
+  } else {
+    const current = this.first;
+    this.first = node;
+    node.next = current;
+    current.prev = node;
+  }
+  this.length++;
+};
+
+/**
+ * @param {number} capacity
+ */
 const LRUCache = function(capacity) {
   this.capacity = capacity;
-  this.storage = [];  // tail of the array is the LRU
-  // [{
-  //   key:
-  //   value
-  // }]
-}
+  this.hash = {};
+  this.list = new DoubleLinkedList();
+};
 
-// O(n)
-LRUCache.prototype.put = function(key, value) {
-  // Check if we have the key & if so, remove it
-  const index = this.storage.findIndex(item => { // O(n)
-    return item.key === key;
-  });
-
-  // If key exists, remove it
-  if (index !== -1) {
-    this.storage.splice(index, 1); // O(n)
-  }
-
-  // If we hit capacity, remove first one
-  if (this.storage.length === this.capacity) {
-    this.storage.shift(); // O(n)
-  }
-
-  // Push value to end of array
-  this.storage.push({ key, value }); // O(1)
-}
-
-// O(n)
+/**
+ * @param {number} key
+ * @return {number}
+*/
 LRUCache.prototype.get = function(key) {
-  // Check if we have the key, if so move it to tail & return value
-  const index = this.storage.findIndex(item => {
-    return item.key === key;
-  }); // O(n)
-
-  // Move item to end of array
   let value;
-  if (index !== -1) {
-    value = this.storage[index].value;
-    this.storage.splice(index, 1); // O(n)
-    this.storage.push({ key, value }); // O(1)
+
+  const existing = this.hash[key];
+  if (existing) {
+    value = existing.value;
+    this.list.remove(existing);
+    this.list.addFirst(existing);
   }
 
   return value || -1;
-}
+};
 
+/**
+ * @param {number} key
+ * @param {number} value
+ * @return {void}
+ */
+LRUCache.prototype.put = function(key, value) {
+  // If key exists, remove
+  const existing = this.hash[key];
+  if (existing) {
+    this.list.remove(existing);
+    delete this.hash[key];
+  }
+
+  // Check capacity, remove last one if reached
+  const capacityReached = this.list.length === this.capacity;
+  if (capacityReached) {
+    const last = this.list.last;
+    this.list.remove(last);
+    delete this.hash[last.key];
+  }
+
+  // Add new one to first
+  const node = new Node(key, value);
+  this.hash[key] = node;
+  this.list.addFirst(node);
+};
 
 export default LRUCache;
