@@ -2,9 +2,10 @@ import BinarySearchTree from './BinarySearchTree';
 
 describe('BinarySearchTree', () => {
 
-  const tree = new BinarySearchTree();
+  describe('TDD', () => {
 
-  describe('add', () => {
+    const tree = new BinarySearchTree();
+
     test('tree is empty', () => {
       expect(tree.size()).toEqual(0);
       expect(tree.print()).toEqual('');
@@ -73,34 +74,53 @@ describe('BinarySearchTree', () => {
   });
 
 
-  const tree2 = new BinarySearchTree();
 
   describe('example tests', () => {
+    const tree = new BinarySearchTree();
+
     test('add', () => {
-      tree2.add(5);
-      tree2.add(3);
-      tree2.add(7);
-      tree2.add(2);
-      tree2.add(4);
-      tree2.add(4);
-      tree2.add(6);
-      tree2.add(8);
-      expect(tree2.print()).toEqual('5 | 3 7 | 2 4 6 8');
+      tree.add(5);
+      tree.add(3);
+      tree.add(7);
+      tree.add(2);
+      tree.add(4);
+      tree.add(4);
+      tree.add(6);
+      tree.add(8);
+      expect(tree.print()).toEqual('5 | 3 7 | 2 4 6 8');
     });
+
+    test('traverseInOrderDFS', () => {
+      expect(tree.traverseInOrderDFS()).toEqual('2 3 4 5 6 7 8');
+    });
+
+    test('traversePreOrderDFS', () => {
+      expect(tree.traversePreOrderDFS()).toEqual('5 3 2 4 7 6 8');
+    });
+
+    test('traversePostOrderDFS', () => {
+      expect(tree.traversePostOrderDFS()).toEqual('2 4 3 6 8 7 5');
+    });
+
+    test('traverseBFS', () => {
+      expect(tree.traverseBFS()).toEqual('5 3 7 2 4 6 8');
+    });
+
+    test('getMin', () => {
+      expect(tree.getMin()).toEqual(2);
+    });
+
+    test('getMax', () => {
+      expect(tree.getMax()).toEqual(8);
+    });
+
+    test('contains', () => {
+      expect(tree.contains(3)).toEqual(true);
+      expect(tree.contains(9)).toEqual(false);
+    });
+
   });
 
-// console.log('--- DFS inOrder');
-// binarySearchTree.traverseDFS(function(node) { console.log(node.data); }, 'inOrder'); // => 2 3 4 5 6 7 8
-// console.log('--- DFS preOrder');
-// binarySearchTree.traverseDFS(function(node) { console.log(node.data); }, 'preOrder'); // => 5 3 2 4 7 6 8
-// console.log('--- DFS postOrder');
-// binarySearchTree.traverseDFS(function(node) { console.log(node.data); }, 'postOrder'); // => 2 4 3 6 8 7 5
-// console.log('--- BFS');
-// binarySearchTree.traverseBFS(function(node) { console.log(node.data); }); // => 5 3 7 2 4 6 8
-// console.log('min is 2:', binarySearchTree.getMin()); // => 2
-// console.log('max is 8:', binarySearchTree.getMax()); // => 8
-// console.log('tree contains 3 is true:', binarySearchTree.contains(3)); // => true
-// console.log('tree contains 9 is false:', binarySearchTree.contains(9)); // => false
 // console.log('tree height is 2:', binarySearchTree.getHeight()); // => 2
 // console.log('tree is balanced is true:', binarySearchTree.isBalanced()); // => true
 // binarySearchTree.remove(11); // remove non existing node

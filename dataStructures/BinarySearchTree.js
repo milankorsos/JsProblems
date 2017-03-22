@@ -81,4 +81,130 @@ BinarySearchTree.prototype.add = function(value, parent = this.root) {
   }
 };
 
+// In-order: left, current, right
+BinarySearchTree.prototype.traverseInOrderDFS = function(node = this.root) {
+  let str = '';
+  if (node) {
+    // left
+    if (node.left) {
+      str = str.concat(this.traverseInOrderDFS(node.left), ' ');
+    }
+    // current
+    str = str.concat(node.value, ' ');
+    // right
+    if (node.right) {
+      str = str.concat(this.traverseInOrderDFS(node.right), ' ');
+    }
+  }
+  return str.trim();
+};
+
+// Pre-order: current, left, right
+BinarySearchTree.prototype.traversePreOrderDFS = function(node = this.root) {
+  let str = '';
+  if (node) {
+    // current
+    str = str.concat(node.value, ' ');
+    // left
+    if (node.left) {
+      str = str.concat(this.traversePreOrderDFS(node.left), ' ');
+    }
+    // right
+    if (node.right) {
+      str = str.concat(this.traversePreOrderDFS(node.right), ' ');
+    }
+  }
+  return str.trim();
+};
+
+// Post-order: left, right, current
+BinarySearchTree.prototype.traversePostOrderDFS = function(node = this.root) {
+  let str = '';
+  if (node) {
+    // left
+    if (node.left) {
+      str = str.concat(this.traversePostOrderDFS(node.left), ' ');
+    }
+    // right
+    if (node.right) {
+      str = str.concat(this.traversePostOrderDFS(node.right), ' ');
+    }
+    // current
+    str = str.concat(node.value, ' ');
+  }
+  return str.trim();
+};
+
+BinarySearchTree.prototype.traverseBFS = function() {
+  let str = '';
+  const queue = []; // use queue.unshift() & queue.pop() for queue-like behavior
+  if (this.root) {
+    queue.unshift(this.root);
+  }
+
+  while (queue.length) {
+    const node = queue.pop();
+    str = str.concat(node.value, ' ');
+    if (node.left) {
+      queue.unshift(node.left);
+    }
+    if (node.right) {
+      queue.unshift(node.right);
+    }
+  }
+  return str.trim()
+};
+
+BinarySearchTree.prototype.getMin = function() {
+  let min;
+  let node = this.root;
+  while (node) {
+    if (node.left) {
+      node = node.left;
+    } else {
+      min = node.value;
+      node = null;
+    }
+  }
+  return min;
+};
+
+BinarySearchTree.prototype.getMax = function() {
+  let max;
+  let node = this.root;
+  while (node) {
+    if (node.right) {
+      node = node.right;
+    } else {
+      max = node.value;
+      node = null;
+    }
+  }
+  return max;
+};
+
+BinarySearchTree.prototype.contains = function(value) {
+  let node = this.root;
+  while (node) {
+    if (node.value === value) {
+      return true;
+    } else if (value < node.value) {
+      node = node.left;
+      if (!node) {
+        return false;
+      }
+    } else if (value > node.value){
+      node = node.right;
+      if (!node) {
+        return false;
+      }
+    }
+  }
+  return false;
+};
+
+
+
+
+
 export default BinarySearchTree;
