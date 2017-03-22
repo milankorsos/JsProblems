@@ -16,33 +16,22 @@ https://leetcode.com/problems/lru-cache/
 
 */
 
-/**
- * @param {number} key
- * @param {number} value
- * @return {void}
- */
 export const Node = function(key, value) {
   this.key = key;
   this.value = value;
   this.next = null;
   this.prev = null;
-}
+};
 
-/**
- */
 export const DoubleLinkedList = function() {
   this.length = 0;
   this.first = null;
   this.last = null;
-}
+};
 
-/**
- * @param {object} node
- * @return {void}
- */
-DoubleLinkedList.prototype.remove = function(node) {
-    const next = node.next;
-    const prev = node.prev;
+DoubleLinkedList.prototype.remove = function(current) {
+    const next = current.next;
+    const prev = current.prev;
 
     if (prev && next) {
       // middle of the list
@@ -56,8 +45,8 @@ DoubleLinkedList.prototype.remove = function(node) {
 
     } else if (prev && !next) {
       // last item
-      this.last = prev;
       prev.next = null;
+      this.last = prev;
 
     } else {
       // only item
@@ -68,10 +57,6 @@ DoubleLinkedList.prototype.remove = function(node) {
     this.length--;
 };
 
-/**
- * @param {object} node
- * @return {void}
- */
 DoubleLinkedList.prototype.addFirst = function(node) {
   if (this.length === 0) {
     this.first = node;
@@ -85,6 +70,53 @@ DoubleLinkedList.prototype.addFirst = function(node) {
   this.length++;
 };
 
+DoubleLinkedList.prototype.moveFirst = function(current) {
+  if (this.first !== current) {
+
+    // Remove it from previous place
+    const next = current.next;
+    const prev = current.prev;
+    if (prev && next) {
+      // middle of the list
+      prev.next = next;
+      next.prev = prev;
+
+    } else if (prev && !next) {
+      // last item
+      prev.next = null;
+      this.last = prev;
+    }
+
+    // Move it to first place
+    const first = this.first;
+    this.first = current;
+    current.next = first;
+    first.prev = current;
+  }
+}
+
+DoubleLinkedList.prototype.print = function() {
+  let str;
+  let counter = 0;
+  let current = this.first;
+
+  if (current) {
+    str = current.key;
+
+    while (current.next) {
+      current = current.next;
+      str += ' ' + current.key;
+
+      // safety against infinite loop
+      counter++;
+      if (counter === 20) {
+        current.next = null;
+      }
+    }
+  }
+  return str;
+}
+
 /**
  * @param {number} capacity
  */
@@ -95,6 +127,8 @@ const LRUCache = function(capacity) {
 };
 
 /**
+ * Get the value (will always be positive) of the key if the key exists in the cache,
+ * otherwise return -1.
  * @param {number} key
  * @return {number}
 */
@@ -104,20 +138,23 @@ LRUCache.prototype.get = function(key) {
   const existing = this.hash[key];
   if (existing) {
     value = existing.value;
-    this.list.remove(existing);
-    this.list.addFirst(existing);
+    this.list.moveFirst(existing);
   }
-
+  // console.log(this.list.print())
   return value || -1;
 };
 
 /**
+ * Set or insert the value if the key is not already present.
  * @param {number} key
  * @param {number} value
  * @return {void}
  */
 LRUCache.prototype.put = function(key, value) {
-  // If key exists, remove
+
+  // console.log('put', key, value)
+
+  // Remove existing
   const existing = this.hash[key];
   if (existing) {
     this.list.remove(existing);
@@ -136,6 +173,9 @@ LRUCache.prototype.put = function(key, value) {
   const node = new Node(key, value);
   this.hash[key] = node;
   this.list.addFirst(node);
+
+  // console.log(this.list.print())
+
 };
 
 export default LRUCache;
