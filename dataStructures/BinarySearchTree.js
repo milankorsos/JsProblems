@@ -203,8 +203,40 @@ BinarySearchTree.prototype.contains = function(value) {
   return false;
 };
 
+BinarySearchTree.prototype.getHeight = function(node = this.root, level = -1) {
+  if (node) {
+    level = Math.max(this.getHeight(node.left, level + 1), this.getHeight(node.right, level + 1));
+  }
+  return level;
+}
 
+// Tree is balanced if the height difference between the left and right subtrees is not more than 1
+BinarySearchTree.prototype.isBalanced = function(node = this.root) {
+  if (!node) {
+    return true;
+  }
 
+  let isBalanced;
+  if (node.left && node.right) {
+    isBalanced = this.isBalanced(node.left) && this.isBalanced(node.right);
+  } else if (!node.left && !node.right) {
+    isBalanced = true;
+  } else {
+    const leftHeight = this.getHeight(node.left);
+    const rightHeight = this.getHeight(node.right);
+    isBalanced = Math.abs(leftHeight - rightHeight) <= 1;
+  }
+  return isBalanced;
+}
 
 
 export default BinarySearchTree;
+
+
+
+
+
+
+
+
+

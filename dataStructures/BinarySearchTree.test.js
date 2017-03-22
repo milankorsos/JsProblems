@@ -119,10 +119,16 @@ describe('BinarySearchTree', () => {
       expect(tree.contains(9)).toEqual(false);
     });
 
+    test('getHeight', () => {
+      expect(tree.getHeight()).toEqual(2);
+    });
+
+    test('isBalanced', () => {
+      expect(tree.isBalanced()).toEqual(true);
+    });
+
   });
 
-// console.log('tree height is 2:', binarySearchTree.getHeight()); // => 2
-// console.log('tree is balanced is true:', binarySearchTree.isBalanced()); // => true
 // binarySearchTree.remove(11); // remove non existing node
 // binarySearchTree.print(); // => 5 | 3 7 | 2 4 6 8
 // binarySearchTree.remove(5); // remove 5, 6 goes up
