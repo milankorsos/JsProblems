@@ -209,7 +209,11 @@ BinarySearchTree.prototype.getHeight = function(node = this.root, level = -1) {
 
 // Tree is balanced if the height difference between the left and right subtrees is not more than 1
 BinarySearchTree.prototype.isBalanced = function(node = this.root) {
-  let isBalanced;
+  if (!node) {
+    return true;
+  }
+
+  let isBalanced = true;
   if (node.left && node.right) {
     isBalanced = this.isBalanced(node.left) && this.isBalanced(node.right);
   } else if (!node.left && !node.right) {
@@ -218,10 +222,10 @@ BinarySearchTree.prototype.isBalanced = function(node = this.root) {
     let leftHeight = 0;
     let rightHeight = 0;
     if (node.left) {
-      leftHeight = this.getHeight(node.left);
+      leftHeight = this.getHeight(node.left) + 1;
     }
     if (node.right) {
-      rightHeight = this.getHeight(node.right);
+      rightHeight = this.getHeight(node.right) + 1;
     }
     isBalanced = Math.abs(leftHeight - rightHeight) <= 1;
   }
@@ -236,7 +240,7 @@ BinarySearchTree.prototype.remove = function(value, node = this.root, parent) {
   // Node is the one has to be removed
   if (node.value === value) {
 
-    // Node no children
+    // Node has no children
     if (!node.right && !node.left) {
 
       // handle special case for root

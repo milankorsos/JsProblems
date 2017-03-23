@@ -92,7 +92,7 @@ describe('BinarySearchTree', () => {
     test('leaf: remove 8, the tree becomes unbalanced', () => {
       tree.remove(8);
       expect(tree.print()).toEqual('6 | 3 | 2 4');
-      //expect(tree.isBalanced()).toEqual(false); // FIXME
+      expect(tree.isBalanced()).toEqual(false);
     });
 
     test('remove all', () => {
@@ -102,7 +102,7 @@ describe('BinarySearchTree', () => {
       tree.remove(6);
       expect(tree.print()).toEqual('');
       expect(tree.getHeight()).toEqual(-1);
-      //expect(tree.isBalanced()).toEqual(true);
+      expect(tree.isBalanced()).toEqual(true);
     });
 
     test('add a new root', () => {
@@ -144,7 +144,7 @@ describe('BinarySearchTree', () => {
     test('remove 13, 13 has no children so nothing changes', () => {
       tree.remove(13);
       expect(tree.print()).toEqual('11 | 6 14 | 4 8 16 | 3 5 7 9 15 17');
-      // expect(tree.isBalanced()).toEqual(false);
+      expect(tree.isBalanced()).toEqual(false);
     });
 
   });
