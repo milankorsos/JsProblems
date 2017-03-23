@@ -50,7 +50,7 @@ BinarySearchTree.prototype.print = function(node = this.root) {
     if(node === newline && queue.length) {
       queue.push(newline);
     }
-    if(node.left) {
+    if (node.left) {
       queue.push(node.left);
     }
     if(node.right) {
@@ -155,9 +155,8 @@ BinarySearchTree.prototype.traverseBFS = function() {
   return str.trim()
 };
 
-BinarySearchTree.prototype.getMin = function() {
+BinarySearchTree.prototype.getMin = function(node = this.root) {
   let min;
-  let node = this.root;
   while (node) {
     if (node.left) {
       node = node.left;
@@ -169,9 +168,8 @@ BinarySearchTree.prototype.getMin = function() {
   return min;
 };
 
-BinarySearchTree.prototype.getMax = function() {
+BinarySearchTree.prototype.getMax = function(node = this.root) {
   let max;
-  let node = this.root;
   while (node) {
     if (node.right) {
       node = node.right;
@@ -183,8 +181,7 @@ BinarySearchTree.prototype.getMax = function() {
   return max;
 };
 
-BinarySearchTree.prototype.contains = function(value) {
-  let node = this.root;
+BinarySearchTree.prototype.contains = function(value, node = this.root) {
   while (node) {
     if (node.value === value) {
       return true;
@@ -208,35 +205,84 @@ BinarySearchTree.prototype.getHeight = function(node = this.root, level = -1) {
     level = Math.max(this.getHeight(node.left, level + 1), this.getHeight(node.right, level + 1));
   }
   return level;
-}
+};
 
 // Tree is balanced if the height difference between the left and right subtrees is not more than 1
 BinarySearchTree.prototype.isBalanced = function(node = this.root) {
-  if (!node) {
-    return true;
-  }
-
   let isBalanced;
   if (node.left && node.right) {
     isBalanced = this.isBalanced(node.left) && this.isBalanced(node.right);
   } else if (!node.left && !node.right) {
     isBalanced = true;
   } else {
-    const leftHeight = this.getHeight(node.left);
-    const rightHeight = this.getHeight(node.right);
+    let leftHeight = 0;
+    let rightHeight = 0;
+    if (node.left) {
+      leftHeight = this.getHeight(node.left);
+    }
+    if (node.right) {
+      rightHeight = this.getHeight(node.right);
+    }
     isBalanced = Math.abs(leftHeight - rightHeight) <= 1;
   }
   return isBalanced;
-}
+};
 
+BinarySearchTree.prototype.remove = function(value, node = this.root, parent) {
+  if (!node) {
+    return;
+  }
+
+  // Node is the one has to be removed
+  if (node.value === value) {
+
+    // Node no children
+    if (!node.right && !node.left) {
+
+      // handle special case for root
+      if (node === this.root) {
+        this.root = null;
+        return;
+      }
+
+      // remove node's reference from parent
+      if (value < parent.value) {
+        parent.left = null;
+      } else {
+        parent.right = null;
+      }
+      return;
+    }
+
+    // Node has  two children
+    if (node.right && node.left) {
+      // move up right substree's minimum to node
+      const rightMin = this.getMin(node.right);
+      node.value = rightMin;
+      this.remove(rightMin, node.right, node);
+      return;
+    }
+
+    // Node has one child
+    if (node.right) {
+      if (value < parent.value) {
+        parent.left = node.right;
+      } else {
+        parent.right = node.right;
+      }
+    } else if (node.left) {
+      if (value < parent.value) {
+        parent.left = node.left;
+      } else {
+        parent.right = node.left;
+      }
+    }
+  } else {
+    // Need to keep searching for node to be removed
+    const child = value < node.value ? node.left : node.right;
+    this.remove(value, child, node);
+  }
+
+};
 
 export default BinarySearchTree;
-
-
-
-
-
-
-
-
-
