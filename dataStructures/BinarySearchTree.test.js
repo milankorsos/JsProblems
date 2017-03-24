@@ -35,21 +35,26 @@ describe('BinarySearchTree', () => {
     });
   });
 
-  test('traverseInOrderDFS', () => {
-    expect(tree.traverseInOrderDFS()).toEqual('2 3 4 5 6 7 8');
+  describe('traversing BST', () => {
+
+    test('traverseInOrderDFS', () => {
+      expect(tree.traverseInOrderDFS()).toEqual('2 3 4 5 6 7 8');
+    });
+
+    test('traversePreOrderDFS', () => {
+      expect(tree.traversePreOrderDFS()).toEqual('5 3 2 4 7 6 8');
+    });
+
+    test('traversePostOrderDFS', () => {
+      expect(tree.traversePostOrderDFS()).toEqual('2 4 3 6 8 7 5');
+    });
+
+    test('traverseBFS', () => {
+      expect(tree.traverseBFS()).toEqual('5 3 7 2 4 6 8');
+    });
+
   });
 
-  test('traversePreOrderDFS', () => {
-    expect(tree.traversePreOrderDFS()).toEqual('5 3 2 4 7 6 8');
-  });
-
-  test('traversePostOrderDFS', () => {
-    expect(tree.traversePostOrderDFS()).toEqual('2 4 3 6 8 7 5');
-  });
-
-  test('traverseBFS', () => {
-    expect(tree.traverseBFS()).toEqual('5 3 7 2 4 6 8');
-  });
 
   test('getMin', () => {
     expect(tree.getMin()).toEqual(2);

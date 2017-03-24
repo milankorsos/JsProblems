@@ -101,20 +101,25 @@ BinarySearchTree.prototype.traverseInOrderDFS = function(node = this.root) {
 
 // Pre-order: current, left, right
 BinarySearchTree.prototype.traversePreOrderDFS = function(node = this.root) {
-  let str = '';
-  if (node) {
-    // current
-    str = str.concat(node.value, ' ');
-    // left
-    if (node.left) {
-      str = str.concat(this.traversePreOrderDFS(node.left), ' ');
+  let result = '';
+  const stack = []; // use stack.push & stack.pop for stack-like behavior
+  stack.push(node);
+
+  while (stack.length) {
+    const current = stack.pop();
+
+    if (current.right) {
+      stack.push(current.right);
     }
-    // right
-    if (node.right) {
-      str = str.concat(this.traversePreOrderDFS(node.right), ' ');
+
+    if (current.left) {
+      stack.push(current.left);
     }
+
+    result += current.value + ' ';
   }
-  return str.trim();
+
+  return result.trim();
 };
 
 // Post-order: left, right, current
