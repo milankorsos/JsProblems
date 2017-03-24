@@ -18,8 +18,17 @@ describe('BinaryTree is superbalanced', () => {
     expect(tree.isSuperBalanced()).toEqual(true);
   });
 
-  test('5 | 3 | 1 is not superbalanced', () => {
+  test('5 | 3 | 1 is superbalanced', () => {
     tree.add(1);
+    expect(tree.isSuperBalanced()).toEqual(true);
+  });
+
+  test('5 | 3 7 | 1 x x 9 | 0 2 x x x x x x | -1  is superbalanced', () => {
+    tree.add(7);
+    tree.add(9);
+    tree.add(0);
+    tree.add(2);
+    tree.add(-1);
     expect(tree.isSuperBalanced()).toEqual(false);
   });
 

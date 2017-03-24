@@ -13,33 +13,35 @@ BinaryTree.prototype.isSuperBalanced = function() {
     return true;
   }
 
-  // superbalanced if diff between min height and max height are 0 or 1
-  const maxHeight = this._getMaxHeight(this.root, 0);
-  const minHeight = this._getMinHeight(this.root, 0);
-  console.log('isSuperBalanced', this.print())
-  return maxHeight - minHeight <= 1;
-}
+  const depths = [];
+  const stack = []; // stack.push() & stack.pop() for stack like behavior
+  stack.push({ node: this.root, depth: 0 });
 
-BinaryTree.prototype._getMaxHeight = function(node, height = 0) {
-  let leftHeight = height;
-  let rightHeight = height;
-  if (node.left) {
-    leftHeight = this._getMaxHeight(node.left, leftHeight + 1);
-  }
-  if (node.right) {
-    rightHeight = this._getMaxHeight(node.right, rightHeight + 1);
-  }
-  return Math.max(leftHeight, rightHeight);
-}
+  while (stack.length) {
+    const { node, depth } = stack.pop();
 
-BinaryTree.prototype._getMinHeight = function(node, height = 0) {
-  let leftHeight = height;
-  let rightHeight = height;
-  if (node.left && node.right) {
-    leftHeight = this._getMinHeight(node.left, leftHeight + 1);
-    rightHeight = this._getMinHeight(node.right, rightHeight + 1);
+    if (!node.right && !node.left) {
+      if (depths.indexOf(depth) === -1) {
+        depths.push(depth)
+      }
+    } else {
+      if (node.right) {
+        stack.push({ node: node.right, depth: depth + 1});
+      }
+      if (node.left) {
+        stack.push({ node: node.left, depth: depth + 1});
+      }
+    }
   }
-  return Math.min(leftHeight, rightHeight);
+
+  // Superbalanced if there are only 2 different depths & diff between them is less than 2
+  let superbalanced = false;
+  if (depths.length == 1) {
+    superbalanced = true;
+  }  else if (depths.length == 2) {
+    superbalanced = Math.abs(depths[0] - depths[1]) < 2;
+  }
+  return superbalanced;
 }
 
 export default BinaryTree;
