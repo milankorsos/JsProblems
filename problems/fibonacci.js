@@ -17,14 +17,28 @@
 
 */
 
-const fibonacci = function(n) {
+// O(n)
+function fibonacci(n) {
+  const memo = {};
+  return fib(n, memo);
+};
+
+
+function fib(n, memo) {
+  if (memo[n]) {
+    return memo[n];
+  }
+
   if (n === 0) {
     return 0;
   }
   if (n === 1) {
     return 1;
   }
-  return fibonacci(n - 1) + fibonacci(n - 2);
+
+  const result = fibonacci(n - 1) + fibonacci(n - 2);
+  memo[n] = result;
+  return result;
 };
 
 export default fibonacci;
