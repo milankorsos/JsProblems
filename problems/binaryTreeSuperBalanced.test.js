@@ -1,4 +1,4 @@
-import BinaryTree, { BinaryTreeNode } from './balancedBinaryTree';
+import BinaryTree, { BinaryTreeNode } from './binaryTreeSuperBalanced';
 
 
 describe('BinaryTree is superbalanced', () => {
