@@ -19,26 +19,21 @@
 
 // O(n)
 function fibonacci(n) {
-  const memo = {};
-  return fib(n, memo);
-};
-
-
-function fib(n, memo) {
-  if (memo[n]) {
-    return memo[n];
+  if ((n === 0) || (n === 1)) {
+    return n;
   }
 
-  if (n === 0) {
-    return 0;
-  }
-  if (n === 1) {
-    return 1;
+  let prevPrev = 0;
+  let prev = 1;
+  let current;
+
+  for (let i = 1; i < n; i++) {
+    current = prev + prevPrev;
+    prevPrev = prev;
+    prev = current;
   }
 
-  const result = fibonacci(n - 1) + fibonacci(n - 2);
-  memo[n] = result;
-  return result;
+  return current;
 };
 
 export default fibonacci;
