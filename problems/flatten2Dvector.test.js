@@ -1,4 +1,4 @@
-import Iterator from './airbnb';
+import Iterator from './flatten2Dvector';
 
 describe('airbnb 1', () => {
   const arr = [[1, 2, 3], [4]];
