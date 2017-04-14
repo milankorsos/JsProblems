@@ -1,6 +1,6 @@
 import Iterator from './flatten2Dvector';
 
-describe('airbnb 1', () => {
+describe('flatten 1', () => {
   const arr = [[1, 2, 3], [4]];
 
   const i = new Iterator(arr);
@@ -31,7 +31,7 @@ describe('airbnb 1', () => {
   });
 })
 
-describe('airbnb 2', () => {
+describe('flatten 2', () => {
   const arr = [];
 
   const i = new Iterator(arr);
@@ -42,7 +42,7 @@ describe('airbnb 2', () => {
   });
 })
 
-describe('airbnb 3', () => {
+describe('flatten 3', () => {
   const arr = [[1],[],[2]];
 
   const i = new Iterator(arr);
@@ -64,7 +64,7 @@ describe('airbnb 3', () => {
 
 })
 
-describe('airbnb 4', () => {
+describe('flatten 4', () => {
   const arr = [[], [], []];
 
   const i = new Iterator(arr);
