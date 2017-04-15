@@ -22,15 +22,15 @@ describe('reverseString', () => {
 
 describe('reverseWords', () => {
 
-  xtest('empty', () => {
+  test('empty', () => {
     expect(reverseWords('')).toEqual('');
   });
 
-  xtest('one', () => {
+  test('one', () => {
     expect(reverseWords('a')).toEqual('a');
   });
 
-  xtest('two', () => {
+  test('two', () => {
     expect(reverseWords('a b')).toEqual('b a');
   });
 

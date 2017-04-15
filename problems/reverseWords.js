@@ -33,9 +33,14 @@ export function reverseWords(message) {
   for (let endIndex = 0; endIndex < chars.length; endIndex++) {
 
     // If deliminator or end of string, reverse the word
-    if (chars[endIndex] === ' ' || endIndex === chars.length - 1) {
+    const lastChar = endIndex === chars.length - 1 && endIndex > startIndex + 1;
+    if (chars[endIndex] === ' ' || lastChar) {
+      if (lastChar) {
+        endIndex++;
+      }
 
-      for (let j = 0; j < Math.floor(endIndex - startIndex / 2); j++) {
+      const length = endIndex - startIndex;
+      for (let j = 0; j < Math.floor(length / 2); j++) {
         const temp = chars[startIndex + j];
         chars[startIndex + j] = chars[endIndex - j - 1];
         chars[endIndex - j - 1] = temp;
