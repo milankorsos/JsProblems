@@ -1,4 +1,4 @@
-import BinaryTree, { BinaryTreeNode } from './binaryTreeValidate';
+import BinaryTree from './binaryTreeValidate';
 
 
 describe('BinaryTree is is valid', () => {
@@ -85,7 +85,6 @@ describe('BinaryTree is is valid', () => {
     tree.add(1);
     tree.add(0);
     tree.root.left.value = 1;
-    console.log(tree.print())
     expect(tree.isValid()).toEqual(false);
   });
 
