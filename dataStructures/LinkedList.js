@@ -43,44 +43,35 @@ LinkedList.prototype.add = function(value) { // O(1)
     this.head = node;
     this.tail = node;
   } else {
-    const last = this.tail;
-    last.next = node;
+    this.tail.next = node;
     this.tail = node;
   }
   this.numberOfValues++;
 }
 
 LinkedList.prototype.remove = function(value) { // O(n)
-  if (this.head) {
+  let prev = this.head;
+  let current = this.head;
 
-    // Remove first element
-    if (this.head.value === value) {
-      this.head = this.head.next;
-      if (!this.head) {
+  while (current) {
+    // Remove
+    if (current.value === value) {
+      if (current === this.head) {
+        this.head = this.head.next;
+      }
+      if (current === this.tail) {
+        this.tail = prev;
+      }
+      prev.next = current.next;
+      this.numberOfValues--;
+      if (this.numberOfValues === 0) {
         this.tail = null;
       }
-      this.numberOfValues--;
-    // Remove middle element
-    } else {
-      let prev = this.head;
-      let current = this.head.next;
-
-      while (current) {
-        // Remove current
-        if (current.value === value) {
-          prev.next = current.next
-          if (!current.next) {
-            this.tail = prev;
-          }
-          this.numberOfValues--;
-          break;
-        }
-
-        // Iterate
-        prev = current;
-        current = current.next;
-      }
     }
+
+    // Iterate
+    prev = current;
+    current = current.next;
   }
 }
 
