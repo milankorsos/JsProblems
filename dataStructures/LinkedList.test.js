@@ -10,7 +10,7 @@ describe('LinkedList', () => {
     });
 
     test('length', () => {
-      expect(list.print()).toEqual('');
+      expect(list.length()).toEqual(0);
     });
   });
 
@@ -31,7 +31,7 @@ describe('LinkedList', () => {
   });
 
   describe('remove', () => {
-    test('middle', () => {
+    test('value', () => {
       list.remove(3);
       expect(list.print()).toEqual('1 2 4');
       expect(list.length()).toEqual(3);
@@ -55,10 +55,11 @@ describe('LinkedList', () => {
       list.remove(4);
       expect(list.print()).toEqual('2');
       expect(list.length()).toEqual(1);
+      expect(list.head.value).toEqual(2);
       expect(list.tail.value).toEqual(2);
     });
 
-    test('last item', () => {
+    test('single item', () => {
       list.remove(2);
       expect(list.print()).toEqual('');
       expect(list.length()).toEqual(0);
