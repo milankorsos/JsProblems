@@ -21,11 +21,22 @@ const _find = function(arr, num, startIndex, endIndex) {
   if (endIndex === startIndex) {
     return arr[endIndex] === num;
   }
+  console.log('FIND', startIndex, endIndex)
 
   // Recursive case
-  const middleIndex = startIndex + Math.floor((endIndex - startIndex) / 2);
+  const guessIndex = startIndex + Math.floor((endIndex - startIndex) / 2);
+  const guessValue = arr[guessIndex];
+  let result;
 
-  return _find(arr, num, startIndex, middleIndex) || _find(arr, num, middleIndex + 1, endIndex)
+  if (guessValue === num) {
+    result = true;
+  } else if (guessValue > num) {
+    result = _find(arr, num, startIndex, guessIndex);
+  } else {
+    result = _find(arr, num, guessIndex + 1, endIndex);
+  }
+
+  return result;
 }
 
 export default find;
